@@ -1,10 +1,3 @@
-
-Další poznámky v Notebooku samozřejmě
-
-Viz M_2022_02_Memorial:
-Cíl je sloučit první tři listy do jednoho, jen tam budou tři, resp 4 sloupce s rankem	
-Není důvod většinu věcí duplikovat !!!	
-Pak ve finále vlastně sloučím i s Pools, klidně tam budu mít statistikcy všechny, v každém řádku? Nebo jak?	
 za mě smysl tři tabulky: 	
 	Jedna se jmény+pohlaví+kluby+státem+rukou+zbraní = údaje o účastnících. Tím vznikne unikátní ID. Pokud člověk má víc angažmá, tak 2 id ?
 	
@@ -14,18 +7,10 @@ za mě smysl tři tabulky:
 Respektive kazdy excel by měl dvě části, výlsedkovou listinu se všemi ranky, a
 soubojovu listinu se všemi souboji,.
 
-ANO, MOHL bzch yapisovat i cislo skupiny a rozhodci, treba to taky ovlivnuje vysledky, ale nechce se mi, zatim]
-	
-Eliminace 64 = 126 řádků co zapíšu. Kdybych to psal jen jednostranně, tak polovina	
-	126
-
-Jednu Poolovou tabulku o 7 lidech dělám 7 minut. Takže celý Pool tak 70-80 minut.
 
 BAcha, Init rank sloupecek v Initiation je uplne k nicemu, to je jen razeni podle abecedy...
 
-V p9sku porpve zmena, jak ve formatu uvodni tabulky a i Pool vyslekdu, tak taky je zde poprve pouzito cislo licence
-
-Pozn Ještě Muži - Straka -Hoyer v eliminaci nemá skore, použiju 15-7 jako průměr tkový.
+Pozn Ještě Muži - Straka -Hoyer v eliminaci nemá skore, použiju 15-7 jako průměr takový.
 
 	
 udělat pak checky:	
@@ -48,8 +33,6 @@ z pohledu výherce?
 
 EXISTuje vzdy tranzitivita? dá se u každé tabulky udělat nějaký spletitý graf, jestli jo nebo ne?
 
-Zjednodušit u žen - už nepsat u každého matche všechno, jako pořád okola klub? mít seznam z prvního listu co pouiju pak an validace
-
 Kontrola, jestli se mi n2kde nerovna utocnik a obrance'
 
 Pozn: někde kde se zjevně neví datum narození, je 1.1. viz Vávra vojtěch, nejprve měl 1.1., ale pak Písek. 
@@ -64,5 +47,11 @@ POZOR NA SESTRY. V KV 2X  Jasná, 2x Kořínková, a ještě máme sestry Prchal
 
 mčr uk 7 zeny, první skupina - ta co má 6 výher a 1 prohru prohrála s tou, co má jen 2 výhry a 5 proher..nedává smysl.
 
-
 Podivný, Waller Jonáš a jeho brácha jsou 2007-2008, a on v roce 2022 byl na juiorech, kadetech i seniorech zároven??
+
+21.12. klasická zábava s GITem:
+- zakládání repa nadvakrát
+- musím psát git push origin main
+- stejně tak git pull origin main
+- klasický konflikt, protože jsem na webu vytvořil README co se mi nepullnull zpět a chci do toho pushovat
+- ale pak už dobrý :) objevilo se mi README u mě :)
