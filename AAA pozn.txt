@@ -1,0 +1,68 @@
+
+Další poznámky v Notebooku samozřejmě
+
+Viz M_2022_02_Memorial:
+Cíl je sloučit první tři listy do jednoho, jen tam budou tři, resp 4 sloupce s rankem	
+Není důvod většinu věcí duplikovat !!!	
+Pak ve finále vlastně sloučím i s Pools, klidně tam budu mít statistikcy všechny, v každém řádku? Nebo jak?	
+za mě smysl tři tabulky: 	
+	Jedna se jmény+pohlaví+kluby+státem+rukou+zbraní = údaje o účastnících. Tím vznikne unikátní ID. Pokud člověk má víc angažmá, tak 2 id ?
+	
+	Druhá se seznamem eventů - datum + jémno + klasifikace + pohlaví ?
+	Třetí se samotnými zápasy, kde pak můžou být jen ID eventu + ID závodníka + ID soupeře, a pak skore (toho zápasu) a jeho celkové ?
+	
+Respektive kazdy excel by měl dvě části, výlsedkovou listinu se všemi ranky, a
+soubojovu listinu se všemi souboji,.
+
+ANO, MOHL bzch yapisovat i cislo skupiny a rozhodci, treba to taky ovlivnuje vysledky, ale nechce se mi, zatim]
+	
+Eliminace 64 = 126 řádků co zapíšu. Kdybych to psal jen jednostranně, tak polovina	
+	126
+
+Jednu Poolovou tabulku o 7 lidech dělám 7 minut. Takže celý Pool tak 70-80 minut.
+
+BAcha, Init rank sloupecek v Initiation je uplne k nicemu, to je jen razeni podle abecedy...
+
+V p9sku porpve zmena, jak ve formatu uvodni tabulky a i Pool vyslekdu, tak taky je zde poprve pouzito cislo licence
+
+Pozn Ještě Muži - Straka -Hoyer v eliminaci nemá skore, použiju 15-7 jako průměr tkový.
+
+	
+udělat pak checky:	
+že mi sedí součet slopuců Dal a Dostal zásahy	
+že mi sedí počet výher per hrář na tabulku V/S	
+že se žádnímu hráči neduplikují Eliminace v jenodm zápasu, třeba E_16 a E_16	
+že každý kdo Advanced má pak aspoň jeden záznam v eliminaci	
+že se mi samozřejmě neduplikují divně jména a nerozjíždí diakritikia
+udělat check že per turnaj je unikátních dvojic jméno + klub stjně v elimiacích a poolech, jako v initial tabulce :)	
+
+2022_09_mcr - NEÁDVÁ SMYSL V DRUHÉ POOLOVÉ TABULCE, ABY jURKA MEL 6 VÝHER A JEDNU ABSOLUTNÍ PROHRU S NĚKÝM, KDO VYHRÁL JEN PŮLKU ZÁPASŮ
+sKUPINA 9 - MÁME TU u Václava výhru 3:3 !!
+
+hLEDÁNÍ PODONOSTÍ - I KDYŽ MEZI DVĚMA LIDMI KONKRÉTNÍ ZÁPAS JEŠTĚ NEPROBĚHL, TAK SE DÁ USOUDIT JAK DOPADNE, NA ZÁKLADĚ JINÝCH ZÁPASŮ?
+TRŘEBA A porazil tyto tři lidi, B z nich porazil jen 2, takže A > B ?
+-> vymyslet nějaký cool predikční systém na základě všech historických zápasů co byly. backtestovat na posledních datech? nebo na jakýchokoliv?
+
+co se vzdát toho, že mám vlastně každej zápas zapsanej dvakrát, z pozice výherce i proherce, a mít to jen jako katalog zápasů, každý jen jednou?
+z pohledu výherce?
+
+EXISTuje vzdy tranzitivita? dá se u každé tabulky udělat nějaký spletitý graf, jestli jo nebo ne?
+
+Zjednodušit u žen - už nepsat u každého matche všechno, jako pořád okola klub? mít seznam z prvního listu co pouiju pak an validace
+
+Kontrola, jestli se mi n2kde nerovna utocnik a obrance'
+
+Pozn: někde kde se zjevně neví datum narození, je 1.1. viz Vávra vojtěch, nejprve měl 1.1., ale pak Písek. 
+Tam to je teda o den posunít, předpokládám, od toho správného už ale.
+
+kontrola, jestli se kadé jméno objevuje stejněkrát vlevo, jako vpravo.
+
+MALá asmyetrei, ti nejlepší z nejlepších jim často chybí kolo 64, protože rovnou projdou eliminací do 32
+32+16+8+4+2 = 62 ZÁZNAMŮ. MINUS 4 protože byly dva volné losy = 58 řádků, pouhých.
+
+POZOR NA SESTRY. V KV 2X  Jasná, 2x Kořínková, a ještě máme sestry Prchalové.
+
+mčr uk 7 zeny, první skupina - ta co má 6 výher a 1 prohru prohrála s tou, co má jen 2 výhry a 5 proher..nedává smysl.
+
+
+Podivný, Waller Jonáš a jeho brácha jsou 2007-2008, a on v roce 2022 byl na juiorech, kadetech i seniorech zároven??
