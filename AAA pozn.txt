@@ -55,3 +55,5 @@ Podivný, Waller Jonáš a jeho brácha jsou 2007-2008, a on v roce 2022 byl na 
 - stejně tak git pull origin main
 - klasický konflikt, protože jsem na webu vytvořil README co se mi nepullnull zpět a chci do toho pushovat
 - ale pak už dobrý :) objevilo se mi README u mě :)
+
+-- taky už vím, že když pushnu bez commitu, že se nic nestane, ale mám to stále připravené k pushi,a v git status se to tváří vyřešeně
