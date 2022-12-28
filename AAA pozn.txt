@@ -57,3 +57,11 @@ Podivný, Waller Jonáš a jeho brácha jsou 2007-2008, a on v roce 2022 byl na 
 - ale pak už dobrý :) objevilo se mi README u mě :)
 
 -- taky už vím, že když pushnu bez commitu, že se nic nestane, ale mám to stále připravené k pushi,a v git status se to tváří vyřešeně
+
+27.1.
+- vizualizace matplotlib
+- vizulaizace plotly - interaktivní
+- pushnutí notebooku na git + nbviewer = interaktivní graph
+- vygenerování HTML téhož, pro každý graf zvlášt = funkční interaktivní grafy?
+- + potenciální embedding (do jendoho velhéko dashboardu?
+- powerBi = paralelní systém na kontrolu grafů
