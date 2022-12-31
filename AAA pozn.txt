@@ -59,9 +59,24 @@ Podivný, Waller Jonáš a jeho brácha jsou 2007-2008, a on v roce 2022 byl na 
 -- taky už vím, že když pushnu bez commitu, že se nic nestane, ale mám to stále připravené k pushi,a v git status se to tváří vyřešeně
 
 27.1.
-- vizualizace matplotlib
+- vizualizace matplotlib = základ
 - vizulaizace plotly - interaktivní
-- pushnutí notebooku na git + nbviewer = interaktivní graph
-- vygenerování HTML téhož, pro každý graf zvlášt = funkční interaktivní grafy?
+- pushnutí notebooku na git + nbviewer = interaktivní graphy
+- vygenerování HTML téhož, pro každý graf zvlášt = funkční interaktivní grafy
++ jde opět nbviewerem otevřít tento file jak interaktivní (nevýhoda - je vygenerovaný na statických datech)
 - + potenciální embedding (do jendoho velhéko dashboardu?
 - powerBi = paralelní systém na kontrolu grafů
+--> V1 = notebook, kde budou čistě jen plotly grafy pod sebou
+  PLUSY: může ot být okomentované, je to vše hezky pod sebou, návaznosti
+ MINUSY: budou tam bohužel bunky s kodem
+--> V2 = jeden velký, nebo více filů s plotly grafy
+  PLUSY: jdu otevřít jen to co chci, velké přehledné.?
+  MINUSY: musím při nových datech přegeneorat všechny tyto files.
+
+2021_09_MCR - Micinec nemá datum narození. Kovařík co je v úvodní soupisce už dál není. Je to jako DNF, nebo vůbec nedorazil?
+tOTEZ V dUKLE 2020
+
+31.12.22
+- blbne mi trochu excel a kopíruje jiná pole než má.
+v eliminace 2020_02.  TRakže udělat test a spočítat jesli sedí vzájený pošet zápasů a že tam nejsou žádné sám proti sobě.
+ntb a nab, lucf, sampn
