@@ -1,28 +1,29 @@
-za mě smysl tři tabulky: 	
-	Jedna se jmény+pohlaví+kluby+státem+rukou+zbraní = údaje o účastnících. Tím vznikne unikátní ID. Pokud člověk má víc angažmá, tak 2 id ?
-	
-	Druhá se seznamem eventů - datum + jémno + klasifikace + pohlaví ?
-	Třetí se samotnými zápasy, kde pak můžou být jen ID eventu + ID závodníka + ID soupeře, a pak skore (toho zápasu) a jeho celkové ?
 	
 Respektive kazdy excel by měl dvě části, výlsedkovou listinu se všemi ranky, a
 soubojovu listinu se všemi souboji,.
 
+Init rank sloupecek v Initiation je uplne k nicemu, to je jen razeni podle abecedy...
 
-BAcha, Init rank sloupecek v Initiation je uplne k nicemu, to je jen razeni podle abecedy...
-
-Pozn Ještě Muži - Straka -Hoyer v eliminaci nemá skore, použiju 15-7 jako průměr takový.
+ERRORY:
+* ??? - Muži - Straka -Hoyer v eliminaci nemá skore, použiju 15-7 jako průměr takový.
+* 2022_09_mcr - NEÁDVÁ SMYSL V DRUHÉ POOLOVÉ TABULCE, ABY jURKA MEL 6 VÝHER A JEDNU ABSOLUTNÍ PROHRU S NĚKÝM, KDO VYHRÁL JEN PŮLKU ZÁPASŮ
+* sKUPINA 9 - MÁME TU u Václava výhru 3:3 !!
+* mčr uk 7 zeny, první skupina - ta co má 6 výher a 1 prohru prohrála s tou, co má jen 2 výhry a 5 proher..nedává smysl.
+* Podivný, Waller Jonáš a jeho brácha jsou 2007-2008, a on v roce 2022 byl na juiorech, kadetech i seniorech zároven??
+* 2021_09_MCR - Micinec nemá datum narození. Kovařík co je v úvodní soupisce už dál není. Je to jako DNF, nebo vůbec nedorazil?
+* tOTEZ V dUKLE 2020
 
 	
-udělat pak checky:	
+udělat pak CHECKY:
 že mi sedí součet slopuců Dal a Dostal zásahy	
 že mi sedí počet výher per hrář na tabulku V/S	
 že se žádnímu hráči neduplikují Eliminace v jenodm zápasu, třeba E_16 a E_16	
 že každý kdo Advanced má pak aspoň jeden záznam v eliminaci	
 že se mi samozřejmě neduplikují divně jména a nerozjíždí diakritikia
 udělat check že per turnaj je unikátních dvojic jméno + klub stjně v elimiacích a poolech, jako v initial tabulce :)	
+Kontrola, jestli se mi n2kde nerovna utocnik a obrance'
+kontrola, jestli se kadé jméno objevuje stejněkrát vlevo, jako vpravo.
 
-2022_09_mcr - NEÁDVÁ SMYSL V DRUHÉ POOLOVÉ TABULCE, ABY jURKA MEL 6 VÝHER A JEDNU ABSOLUTNÍ PROHRU S NĚKÝM, KDO VYHRÁL JEN PŮLKU ZÁPASŮ
-sKUPINA 9 - MÁME TU u Václava výhru 3:3 !!
 
 hLEDÁNÍ PODONOSTÍ - I KDYŽ MEZI DVĚMA LIDMI KONKRÉTNÍ ZÁPAS JEŠTĚ NEPROBĚHL, TAK SE DÁ USOUDIT JAK DOPADNE, NA ZÁKLADĚ JINÝCH ZÁPASŮ?
 TRŘEBA A porazil tyto tři lidi, B z nich porazil jen 2, takže A > B ?
@@ -33,21 +34,10 @@ z pohledu výherce?
 
 EXISTuje vzdy tranzitivita? dá se u každé tabulky udělat nějaký spletitý graf, jestli jo nebo ne?
 
-Kontrola, jestli se mi n2kde nerovna utocnik a obrance'
 
-Pozn: někde kde se zjevně neví datum narození, je 1.1. viz Vávra vojtěch, nejprve měl 1.1., ale pak Písek. 
-Tam to je teda o den posunít, předpokládám, od toho správného už ale.
-
-kontrola, jestli se kadé jméno objevuje stejněkrát vlevo, jako vpravo.
-
-MALá asmyetrei, ti nejlepší z nejlepších jim často chybí kolo 64, protože rovnou projdou eliminací do 32
+MALá asmyetrie, ti nejlepší z nejlepších jim často chybí kolo 64, protože rovnou projdou eliminací do 32
 32+16+8+4+2 = 62 ZÁZNAMŮ. MINUS 4 protože byly dva volné losy = 58 řádků, pouhých.
 
-POZOR NA SESTRY. V KV 2X  Jasná, 2x Kořínková, a ještě máme sestry Prchalové.
-
-mčr uk 7 zeny, první skupina - ta co má 6 výher a 1 prohru prohrála s tou, co má jen 2 výhry a 5 proher..nedává smysl.
-
-Podivný, Waller Jonáš a jeho brácha jsou 2007-2008, a on v roce 2022 byl na juiorech, kadetech i seniorech zároven??
 
 21.12. klasická zábava s GITem:
 - zakládání repa nadvakrát
@@ -61,22 +51,17 @@ Podivný, Waller Jonáš a jeho brácha jsou 2007-2008, a on v roce 2022 byl na 
 27.1.
 - vizualizace matplotlib = základ
 - vizulaizace plotly - interaktivní
-- pushnutí notebooku na git + nbviewer = interaktivní graphy
-- vygenerování HTML téhož, pro každý graf zvlášt = funkční interaktivní grafy
-+ jde opět nbviewerem otevřít tento file jak interaktivní (nevýhoda - je vygenerovaný na statických datech)
-- + potenciální embedding (do jendoho velhéko dashboardu?
+- pushnutí notebooku na git + nbviewer = všechny graphy jsou interaktivní
+- vygenerování HTML téhož, pro každý graf zvlášt = funkční interaktivní grafy, samostatné soubory
+  + jde opět nbviewerem otevřít tento file jak interaktivní (nevýhoda - je vygenerovaný na statických datech)
+  + potenciální embedding (do jendoho velhéko dashboardu?)
 - powerBi = paralelní systém na kontrolu grafů
---> V1 = notebook, kde budou čistě jen plotly grafy pod sebou
+
+--> V1 = založit notebook, kde budou čistě jen plotly grafy pod sebou
   PLUSY: může ot být okomentované, je to vše hezky pod sebou, návaznosti
- MINUSY: budou tam bohužel bunky s kodem
---> V2 = jeden velký, nebo více filů s plotly grafy
+ MINUSY: budou tam bohužel buňky s kodem
+--> V2 = jeden velký, nebo více samostatných HTML filů s plotly grafy
   PLUSY: jdu otevřít jen to co chci, velké přehledné.?
-  MINUSY: musím při nových datech přegeneorat všechny tyto files.
+  MINUSY: musím při nových datech přegenerovat všechny tyto files.
 
-2021_09_MCR - Micinec nemá datum narození. Kovařík co je v úvodní soupisce už dál není. Je to jako DNF, nebo vůbec nedorazil?
-tOTEZ V dUKLE 2020
 
-31.12.22
-- blbne mi trochu excel a kopíruje jiná pole než má.
-v eliminace 2020_02.  TRakže udělat test a spočítat jesli sedí vzájený pošet zápasů a že tam nejsou žádné sám proti sobě.
-ntb a nab, lucf, sampn
