@@ -1,4 +1,5 @@
 	
+
 Respektive kazdy excel by měl dvě části, výlsedkovou listinu se všemi ranky, a
 soubojovu listinu se všemi souboji,.
 
