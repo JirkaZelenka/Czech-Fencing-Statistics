@@ -1,4 +1,6 @@
-	
+Ty zápasy s opravami, až je plně pochopím, asi nejsou naškodu.
+BUde to třetí typ Fight_lvl, zvýší to počet soubojů mezi ženami (budou víc prokombinované mezi sebou, cool)
+ a zároven teda z toho nevidím hned výsledné skore, ale to beztak vidím z výsledkové listiny
 
 Respektive kazdy excel by měl dvě části, výlsedkovou listinu se všemi ranky, a
 soubojovu listinu se všemi souboji,.
@@ -14,6 +16,8 @@ ERRORY:
 * Podivný, Waller Jonáš a jeho brácha jsou 2007-2008, a on v roce 2022 byl na juiorech, kadetech i seniorech zároven??
 * 2021_09_MCR - Micinec nemá datum narození. Kovařík co je v úvodní soupisce už dál není. Je to jako DNF, nebo vůbec nedorazil?
 * tOTEZ V dUKLE 2020
+- POSRANÁ VĚC NA SVAZU - viz ženy 25.5.2019 - ten rturnaj po rozkliknutí nic neukáže, musím kliknout přede mna ikonku výsledků, pak jo...
+- teď musím dostahovat data co mi předtím chyběla.
 
 	
 udělat pak CHECKY:
@@ -25,6 +29,7 @@ udělat pak CHECKY:
 udělat check že per turnaj je unikátních dvojic jméno + klub stjně v elimiacích a poolech, jako v initial tabulce :)	
 Kontrola, jestli se mi n2kde nerovna utocnik a obrance'
 kontrola, jestli se kadé jméno objevuje stejněkrát vlevo, jako vpravo.
+2019 POhar CEZ - je tu rodné příjmení!! DIVIŠOVÁ, ROZ. JÍLK Klára. Dále pak znám samozřejmě Šámalová-Pokorná
 
 
 hLEDÁNÍ PODONOSTÍ - I KDYŽ MEZI DVĚMA LIDMI KONKRÉTNÍ ZÁPAS JEŠTĚ NEPROBĚHL, TAK SE DÁ USOUDIT JAK DOPADNE, NA ZÁKLADĚ JINÝCH ZÁPASŮ?
