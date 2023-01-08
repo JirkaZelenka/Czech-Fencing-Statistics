@@ -19,7 +19,10 @@ ERRORY:
 - POSRANÁ VĚC NA SVAZU - viz ženy 25.5.2019 - ten turnaj po rozkliknutí nic neukáže, musím kliknout přede mna ikonku výsledků, pak jo...
    - teď musím dostahovat data co mi předtím chyběla.
    - totéž 19.09.2020  a  27.11.2021
-   - výjimka: 09.05.2022 které nemá ani ten proklik na pdf ..možná to někde visí jinde
+   - výjimka: 09.05.2022 které nemá ani ten proklik na pdf ..možná to někde visí jind
+pokud se menmýlím, tak ve W_20
+21_11 chybí 8čkové zápasy žen, je tam rovnou semifinále
+
 
 	
 udělat pak CHECKY:
@@ -46,6 +49,8 @@ EXISTuje vzdy tranzitivita? dá se u každé tabulky udělat nějaký spletitý 
 
 MALá asmyetrie, ti nejlepší z nejlepších jim často chybí kolo 64, protože rovnou projdou eliminací do 32
 32+16+8+4+2 = 62 ZÁZNAMŮ. MINUS 4 protože byly dva volné losy = 58 řádků, pouhých.
+
+Nápad: přidat tam LVL závodu, tj UŠL < Klasický závod < MČR < Evropské < Světové
 
 
 21.12. klasická zábava s GITem:
