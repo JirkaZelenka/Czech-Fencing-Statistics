@@ -50,7 +50,6 @@ EXISTuje vzdy tranzitivita? dá se u každé tabulky udělat nějaký spletitý 
 MALá asmyetrie, ti nejlepší z nejlepších jim často chybí kolo 64, protože rovnou projdou eliminací do 32
 32+16+8+4+2 = 62 ZÁZNAMŮ. MINUS 4 protože byly dva volné losy = 58 řádků, pouhých.
 
-Nápad: přidat tam LVL závodu, tj UŠL < Klasický závod < MČR < Evropské < Světové
 
 
 21.12. klasická zábava s GITem:
@@ -77,5 +76,3 @@ Nápad: přidat tam LVL závodu, tj UŠL < Klasický závod < MČR < Evropské <
 --> V2 = jeden velký, nebo více samostatných HTML filů s plotly grafy
   PLUSY: jdu otevřít jen to co chci, velké přehledné.?
   MINUSY: musím při nových datech přegenerovat všechny tyto files.
-
-
