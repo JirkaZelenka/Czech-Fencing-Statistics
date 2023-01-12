@@ -35,6 +35,7 @@ udělat check že per turnaj je unikátních dvojic jméno + klub stjně v elimi
 Kontrola, jestli se mi n2kde nerovna utocnik a obrance'
 kontrola, jestli se kadé jméno objevuje stejněkrát vlevo, jako vpravo.
 2019 POhar CEZ - je tu rodné příjmení!! DIVIŠOVÁ, ROZ. JÍLK Klára. Dále pak znám samozřejmě Šámalová-Pokorná
+CHECK  že každý kdo má účst v závodě tam pak má několik řádek, nebo minimálně DNF
 
 
 hLEDÁNÍ PODONOSTÍ - I KDYŽ MEZI DVĚMA LIDMI KONKRÉTNÍ ZÁPAS JEŠTĚ NEPROBĚHL, TAK SE DÁ USOUDIT JAK DOPADNE, NA ZÁKLADĚ JINÝCH ZÁPASŮ?
