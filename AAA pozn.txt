@@ -54,6 +54,16 @@ MALá asmyetrie, ti nejlepší z nejlepších jim často chybí kolo 64, protož
 32+16+8+4+2 = 62 ZÁZNAMŮ. MINUS 4 protože byly dva volné losy = 58 řádků, pouhých.
 
 
+NA WEB:
+nahoře hlavička s posledním datumem aktualizace, se seznamem turnajů co máme zpracované, s návodem jak klikat na interkativní grafy, 
+s poprosením o trpělivost s načítáním webu?, s možností zanechat komentář (odkaz na mailové pole), atd.?
+
+Zjistit podle čeho se řadí ta legenda u grafů, ani abecedně, ani podle počtu lidí..možná je to podle výskystu, podle abecedy jmen lidí??
+- tak mám pravdu, je to podle výskytu v datech, a je na to případně "traceorder"
+-> HOTOVO
+
+TO DO: ještě tam nahodit hezčí barvy grafu, pozadí, aby na osách byla jen celá čísla, nějake podbarvené legendy atd.
+
 
 21.12. klasická zábava s GITem:
 - zakládání repa nadvakrát
