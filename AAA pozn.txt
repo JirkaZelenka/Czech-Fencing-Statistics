@@ -29,6 +29,14 @@ pokud se menmýlím, tak ve W_20
 -> Podívat se na klub BOHEP
 -> Obecně t ykluby ze zahraničí, včetně bratislavy, mají dohromady 9 klubů = 11 členů -> možná mergnout?
 
+Achjo tohle je fakt smutný.
+Přepisuju 5.2. tabulky, resp přidávám všude list TOTAL jako mix prvních tří.
+Po pěti excelech zjistím, že zapomínám řadit First_rank a Total_rank list podle abecedy.
+OK. Náhodou, protože se podívám a nesedí mi pořadí někoho známého.
+Ok, po té co to opravím a jsem u 10 tak zjistím že mi nesedí pořadí 80 u VOjty Vávry a neměl by být poslední. Najdu si ho ještě v Poolu.
+-> Zjistím, že lidi z INit_rank listu vypdají podle abecedy ale nemusí být žejo..protože bohužel cizinci jsou poslední.
+tak jdeme opravovat...
+
 
 
 	
