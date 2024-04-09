@@ -19,7 +19,7 @@ fig = px.histogram(df, x='birthyear', color='sex', title='TEST Histogram of Reco
 fig.update_xaxes(tickvals=bins, ticktext=labels)
 
 app.layout = html.Div([
-    html.Div(children='My First App with Data'),
+    html.Div(children='TEST My First App with Data'),
     dcc.Graph(figure=px.histogram(df, x='birthyear',  color='club_id', nbins=len(df['birthyear'].unique()))),
     dcc.Graph(figure=fig)
 ])
