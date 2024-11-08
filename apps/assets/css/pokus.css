@@ -1,0 +1,13 @@
+.nav-link {
+    color: #ffffff;  /* White text */
+    text-decoration: none;
+    padding: 8px 15px;  /* Spacing around each link */
+    border-radius: 5px;  /* Rounded edges */
+    margin: 0 5px;  /* Space between links */
+    background-color: #0074D9;  /* Lighter blue background for "button" effect */
+    transition: background-color 0.3s ease;
+}
+
+.nav-link:hover {
+    background-color: #005bb5;  /* Darker blue on hover */
+}

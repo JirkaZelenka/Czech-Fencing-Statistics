@@ -21,7 +21,7 @@ class DataManager:
 
             return None
 
-    def get_all_tournament_results(self, table_name="tournament_results"):
+    def get_all_data(self, table_name="tournament_results"):
         
         with self._get_connection() as conn:        
             try:

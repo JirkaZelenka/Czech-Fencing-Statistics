@@ -19,8 +19,16 @@ VALID_USERNAME_PASSWORD_PAIRS = {
     }
 
 runner = Runner()
-data = runner.data_manager.get_all_tournament_results()
-print(f"LOADED DATA of TOURNAMENTS: {len(data)}")
+df_clubs = runner.data_manager.get_all_data("clubs")
+df_duels = runner.data_manager.get_all_data("duels")
+df_fencers = runner.data_manager.get_all_data("fencers")
+df_tournaments = runner.data_manager.get_all_data("tournaments")
+df_tournaments_results = runner.data_manager.get_all_data("tournament_results")
+print(f"LOADED DATA of CLUBS: {len(df_clubs)}")
+print(f"LOADED DATA of DUELS: {len(df_duels)}")
+print(f"LOADED DATA of FENCERS: {len(df_fencers)}")
+print(f"LOADED DATA of TOURNAMENTS: {len(df_tournaments)}")
+print(f"LOADED DATA of TOURNAMENTS RESULTS: {len(df_tournaments_results)}")
 
 app = dash.Dash(__name__, suppress_callback_exceptions=True)
 auth = dash_auth.BasicAuth(
@@ -51,7 +59,7 @@ def display_page(pathname):
     elif pathname == '/tournaments':
         return create_tournaments_layout()
 
-register_callbacks(app, runner, data) # runner can be part of it
+register_callbacks(app, runner, df_clubs, df_duels, df_fencers, df_tournaments, df_tournaments_results) 
 
 if __name__ == '__main__':
     app.run_server(debug=True, host='127.0.0.1', port=8052)
