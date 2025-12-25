@@ -45,42 +45,125 @@ def register_callbacks(
             # For now, assume club name is already correctly named or handle separately
             pass
         
-        # Apply filters
+        # Apply filters to get filtered data for the table
+        filtered_data = data.copy()
         if selected_names:
-            data = data[data['name'].isin(selected_names)]
+            filtered_data = filtered_data[filtered_data['name'].isin(selected_names)]
         if selected_clubs:
-            data = data[data['club_name'].isin(selected_clubs)]
+            filtered_data = filtered_data[filtered_data['club_name'].isin(selected_clubs)]
         if selected_countries:
-            data = data[data['country'].isin(selected_countries)]
+            filtered_data = filtered_data[filtered_data['country'].isin(selected_countries)]
         if selected_genders:
-            data = data[data['gender'].isin(selected_genders)]
+            filtered_data = filtered_data[filtered_data['gender'].isin(selected_genders)]
         if selected_birthyears:
-            data = data[data['birthyear'].isin(selected_birthyears)]
+            filtered_data = filtered_data[filtered_data['birthyear'].isin(selected_birthyears)]
 
         #? bohužel neexistuje link na fencera, jen na klub (vlastní URL)   
-        #data['name_url'] = data['name'].apply(lambda x: f"[{x}](https://www.czechfencing.cz/)")
+        #data['name_url'] = data['name'].apply(lambda x: f"[{x}](https://www.czechfencing.cz/)")")
         def create_club_url(row):
             if pd.notna(row['website']) and row['website']:
                 return f"[{row['club_name']}]({row['website']})"
             return f"[{row['club_name']}](https://www.czechfencing.cz/)"
         
-        data['name_url'] = data.apply(create_club_url, axis=1)
+        filtered_data['name_url'] = filtered_data.apply(create_club_url, axis=1)
          
-        def make_options(series):
-            return [{"label": v, "value": v} for v in sorted(series.dropna().unique())]
+        def make_options(series, is_date=False, is_numeric=False):
+            unique_vals = series.dropna().unique()
+            if is_date:
+                # Sort dates chronologically (newest first)
+                try:
+                    # Try to parse as dates and sort
+                    sorted_vals = sorted(unique_vals, key=lambda x: pd.to_datetime(x, errors='coerce'), reverse=True)
+                    # Filter out any that couldn't be parsed (will be at the end)
+                    valid_dates = [v for v in sorted_vals if pd.notna(pd.to_datetime(v, errors='coerce'))]
+                    invalid_dates = [v for v in sorted_vals if pd.isna(pd.to_datetime(v, errors='coerce'))]
+                    return [{"label": v, "value": v} for v in valid_dates + sorted(invalid_dates)]
+                except Exception:
+                    # Fallback to alphabetical if date parsing fails
+                    return [{"label": v, "value": v} for v in sorted(unique_vals)]
+            elif is_numeric:
+                # Sort numerically (largest first)
+                try:
+                    sorted_vals = sorted(unique_vals, key=lambda x: pd.to_numeric(x, errors='coerce'), reverse=True)
+                    # Filter out any that couldn't be parsed (will be at the end)
+                    valid_nums = [v for v in sorted_vals if pd.notna(pd.to_numeric(v, errors='coerce'))]
+                    invalid_nums = [v for v in sorted_vals if pd.isna(pd.to_numeric(v, errors='coerce'))]
+                    return [{"label": v, "value": v} for v in valid_nums + sorted(invalid_nums)]
+                except Exception:
+                    # Fallback to alphabetical if numeric parsing fails
+                    return [{"label": v, "value": v} for v in sorted(unique_vals)]
+            else:
+                # Sort alphabetically
+                return [{"label": v, "value": v} for v in sorted(unique_vals)]
 
-        names_opts = make_options(data["name"])
-        clubs_opts = make_options(data["club_name"])
-        countries_opts = make_options(data["country"])
-        genders_opts = make_options(data["gender"])
-        birthyears_opts = make_options(data["birthyear"])
+        # Generate options from data filtered by OTHER filters (interdependent filtering)
+        # This allows adding more values to widen the selection
+        # For names: filter by clubs, countries, genders, birthyears (but not names)
+        data_for_names = data.copy()
+        if selected_clubs:
+            data_for_names = data_for_names[data_for_names['club_name'].isin(selected_clubs)]
+        if selected_countries:
+            data_for_names = data_for_names[data_for_names['country'].isin(selected_countries)]
+        if selected_genders:
+            data_for_names = data_for_names[data_for_names['gender'].isin(selected_genders)]
+        if selected_birthyears:
+            data_for_names = data_for_names[data_for_names['birthyear'].isin(selected_birthyears)]
+        names_opts = make_options(data_for_names["name"])
+        
+        # For clubs: filter by names, countries, genders, birthyears (but not clubs)
+        data_for_clubs = data.copy()
+        if selected_names:
+            data_for_clubs = data_for_clubs[data_for_clubs['name'].isin(selected_names)]
+        if selected_countries:
+            data_for_clubs = data_for_clubs[data_for_clubs['country'].isin(selected_countries)]
+        if selected_genders:
+            data_for_clubs = data_for_clubs[data_for_clubs['gender'].isin(selected_genders)]
+        if selected_birthyears:
+            data_for_clubs = data_for_clubs[data_for_clubs['birthyear'].isin(selected_birthyears)]
+        clubs_opts = make_options(data_for_clubs["club_name"])
+        
+        # For countries: filter by names, clubs, genders, birthyears (but not countries)
+        data_for_countries = data.copy()
+        if selected_names:
+            data_for_countries = data_for_countries[data_for_countries['name'].isin(selected_names)]
+        if selected_clubs:
+            data_for_countries = data_for_countries[data_for_countries['club_name'].isin(selected_clubs)]
+        if selected_genders:
+            data_for_countries = data_for_countries[data_for_countries['gender'].isin(selected_genders)]
+        if selected_birthyears:
+            data_for_countries = data_for_countries[data_for_countries['birthyear'].isin(selected_birthyears)]
+        countries_opts = make_options(data_for_countries["country"])
+        
+        # For genders: filter by names, clubs, countries, birthyears (but not genders)
+        data_for_genders = data.copy()
+        if selected_names:
+            data_for_genders = data_for_genders[data_for_genders['name'].isin(selected_names)]
+        if selected_clubs:
+            data_for_genders = data_for_genders[data_for_genders['club_name'].isin(selected_clubs)]
+        if selected_countries:
+            data_for_genders = data_for_genders[data_for_genders['country'].isin(selected_countries)]
+        if selected_birthyears:
+            data_for_genders = data_for_genders[data_for_genders['birthyear'].isin(selected_birthyears)]
+        genders_opts = make_options(data_for_genders["gender"])
+        
+        # For birthyears: filter by names, clubs, countries, genders (but not birthyears)
+        data_for_birthyears = data.copy()
+        if selected_names:
+            data_for_birthyears = data_for_birthyears[data_for_birthyears['name'].isin(selected_names)]
+        if selected_clubs:
+            data_for_birthyears = data_for_birthyears[data_for_birthyears['club_name'].isin(selected_clubs)]
+        if selected_countries:
+            data_for_birthyears = data_for_birthyears[data_for_birthyears['country'].isin(selected_countries)]
+        if selected_genders:
+            data_for_birthyears = data_for_birthyears[data_for_birthyears['gender'].isin(selected_genders)]
+        birthyears_opts = make_options(data_for_birthyears["birthyear"], is_numeric=True)
 
-        data = data.sort_values(by='name', ascending=True)
-        data = data.to_dict('records')
+        filtered_data = filtered_data.sort_values(by='name', ascending=True)
+        filtered_data = filtered_data.to_dict('records')
             
-        message_count_fencers = f"{len(data)} records"
+        message_count_fencers = f"{len(filtered_data)} records"
             
-        return (data,
+        return (filtered_data,
                 message_count_fencers,
                 names_opts,
                 clubs_opts,
@@ -118,26 +201,63 @@ def register_callbacks(
         
         data = df_clubs
         
-        # Apply filters
+        # Apply filters to get filtered data for the table
+        filtered_data = data.copy()
         if selected_names:
-            data = data[data['name'].isin(selected_names)]
+            filtered_data = filtered_data[filtered_data['name'].isin(selected_names)]
         if selected_cities:
-            data = data[data['city'].isin(selected_cities)]
+            filtered_data = filtered_data[filtered_data['city'].isin(selected_cities)]
 
-        data['name_url'] = data.apply(lambda row: f"[{row['name']}]({row['website']})", axis=1)
+        filtered_data['name_url'] = filtered_data.apply(lambda row: f"[{row['name']}]({row['website']})", axis=1)
             
-        def make_options(series):
-            return [{"label": v, "value": v} for v in sorted(series.dropna().unique())]
+        def make_options(series, is_date=False, is_numeric=False):
+            unique_vals = series.dropna().unique()
+            if is_date:
+                # Sort dates chronologically (newest first)
+                try:
+                    # Try to parse as dates and sort
+                    sorted_vals = sorted(unique_vals, key=lambda x: pd.to_datetime(x, errors='coerce'), reverse=True)
+                    # Filter out any that couldn't be parsed (will be at the end)
+                    valid_dates = [v for v in sorted_vals if pd.notna(pd.to_datetime(v, errors='coerce'))]
+                    invalid_dates = [v for v in sorted_vals if pd.isna(pd.to_datetime(v, errors='coerce'))]
+                    return [{"label": v, "value": v} for v in valid_dates + sorted(invalid_dates)]
+                except Exception:
+                    # Fallback to alphabetical if date parsing fails
+                    return [{"label": v, "value": v} for v in sorted(unique_vals)]
+            elif is_numeric:
+                # Sort numerically (largest first)
+                try:
+                    sorted_vals = sorted(unique_vals, key=lambda x: pd.to_numeric(x, errors='coerce'), reverse=True)
+                    # Filter out any that couldn't be parsed (will be at the end)
+                    valid_nums = [v for v in sorted_vals if pd.notna(pd.to_numeric(v, errors='coerce'))]
+                    invalid_nums = [v for v in sorted_vals if pd.isna(pd.to_numeric(v, errors='coerce'))]
+                    return [{"label": v, "value": v} for v in valid_nums + sorted(invalid_nums)]
+                except Exception:
+                    # Fallback to alphabetical if numeric parsing fails
+                    return [{"label": v, "value": v} for v in sorted(unique_vals)]
+            else:
+                # Sort alphabetically
+                return [{"label": v, "value": v} for v in sorted(unique_vals)]
 
-        clubs_opts = make_options(data["name"])
-        cities_opts = make_options(data["city"])
+        # Generate options from data filtered by OTHER filters (interdependent filtering)
+        # For names: filter by cities (but not names)
+        data_for_names = data.copy()
+        if selected_cities:
+            data_for_names = data_for_names[data_for_names['city'].isin(selected_cities)]
+        clubs_opts = make_options(data_for_names["name"])
+        
+        # For cities: filter by names (but not cities)
+        data_for_cities = data.copy()
+        if selected_names:
+            data_for_cities = data_for_cities[data_for_cities['name'].isin(selected_names)]
+        cities_opts = make_options(data_for_cities["city"])
 
-        data = data.sort_values(by='name', ascending=True)
-        data = data.to_dict('records')
+        filtered_data = filtered_data.sort_values(by='name', ascending=True)
+        filtered_data = filtered_data.to_dict('records')
             
-        message_count_clubs = f"{len(data)} records"
+        message_count_clubs = f"{len(filtered_data)} records"
             
-        return (data,
+        return (filtered_data,
                 message_count_clubs,
                 clubs_opts,
                 cities_opts
@@ -189,42 +309,91 @@ def register_callbacks(
         #? ale stále, df_duels_prep jde na filtry, ale tady to přepočíává znova??        
         data = df_duels_prep
             
-        # Apply filters
+        # Apply filters to get filtered data for the table
+        filtered_data = data.copy()
         if selected_tournaments:
-            data = data[data['name_tournament'].isin(selected_tournaments)]
+            filtered_data = filtered_data[filtered_data['name_tournament'].isin(selected_tournaments)]
         if selected_dates:
-            data = data[data['date'].isin(selected_dates)]
+            filtered_data = filtered_data[filtered_data['date'].isin(selected_dates)]
         if selected_winners:
-            data = data[data['name_fencer_winner'].isin(selected_winners)]
+            filtered_data = filtered_data[filtered_data['name_fencer_winner'].isin(selected_winners)]
         if selected_winner_clubs:
-            data = data[data['name_club_winner'].isin(selected_winner_clubs)]
+            filtered_data = filtered_data[filtered_data['name_club_winner'].isin(selected_winner_clubs)]
         if selected_losers:
-            data = data[data['name_fencer_loser'].isin(selected_losers)]
+            filtered_data = filtered_data[filtered_data['name_fencer_loser'].isin(selected_losers)]
         if selected_loser_clubs:
-            data = data[data['name_club_loser'].isin(selected_loser_clubs)]
+            filtered_data = filtered_data[filtered_data['name_club_loser'].isin(selected_loser_clubs)]
         if selected_fight_lvl:
-            data = data[data['type'].isin(selected_fight_lvl)]
+            filtered_data = filtered_data[filtered_data['type'].isin(selected_fight_lvl)]
         if selected_gender:
-            data = data[data['gender'].isin(selected_gender)]
+            filtered_data = filtered_data[filtered_data['gender'].isin(selected_gender)]
 
-        def make_options(series):
-            return [{"label": v, "value": v} for v in sorted(series.dropna().unique())]
+        def make_options(series, is_date=False, is_numeric=False):
+            unique_vals = series.dropna().unique()
+            if is_date:
+                # Sort dates chronologically (newest first)
+                try:
+                    # Try to parse as dates and sort
+                    sorted_vals = sorted(unique_vals, key=lambda x: pd.to_datetime(x, errors='coerce'), reverse=True)
+                    # Filter out any that couldn't be parsed (will be at the end)
+                    valid_dates = [v for v in sorted_vals if pd.notna(pd.to_datetime(v, errors='coerce'))]
+                    invalid_dates = [v for v in sorted_vals if pd.isna(pd.to_datetime(v, errors='coerce'))]
+                    return [{"label": v, "value": v} for v in valid_dates + sorted(invalid_dates)]
+                except Exception:
+                    # Fallback to alphabetical if date parsing fails
+                    return [{"label": v, "value": v} for v in sorted(unique_vals)]
+            elif is_numeric:
+                # Sort numerically (largest first)
+                try:
+                    sorted_vals = sorted(unique_vals, key=lambda x: pd.to_numeric(x, errors='coerce'), reverse=True)
+                    # Filter out any that couldn't be parsed (will be at the end)
+                    valid_nums = [v for v in sorted_vals if pd.notna(pd.to_numeric(v, errors='coerce'))]
+                    invalid_nums = [v for v in sorted_vals if pd.isna(pd.to_numeric(v, errors='coerce'))]
+                    return [{"label": v, "value": v} for v in valid_nums + sorted(invalid_nums)]
+                except Exception:
+                    # Fallback to alphabetical if numeric parsing fails
+                    return [{"label": v, "value": v} for v in sorted(unique_vals)]
+            else:
+                # Sort alphabetically
+                return [{"label": v, "value": v} for v in sorted(unique_vals)]
 
-        tournament_opts = make_options(data["name_tournament"])
-        date_opts = make_options(data["date"])
-        winner_opts = make_options(data["name_fencer_winner"])
-        winner_club_opts = make_options(data["name_club_winner"])
-        loser_opts = make_options(data["name_fencer_loser"])
-        loser_club_opts = make_options(data["name_club_loser"])
-        fight_lvl_opts = make_options(data["type"])
-        gender_opts = make_options(data["gender"])
+        # Helper function to apply all filters except one
+        def apply_filters_except(data_df, exclude_filter):
+            result = data_df.copy()
+            if exclude_filter != 'tournament' and selected_tournaments:
+                result = result[result['name_tournament'].isin(selected_tournaments)]
+            if exclude_filter != 'date' and selected_dates:
+                result = result[result['date'].isin(selected_dates)]
+            if exclude_filter != 'winner' and selected_winners:
+                result = result[result['name_fencer_winner'].isin(selected_winners)]
+            if exclude_filter != 'winner_club' and selected_winner_clubs:
+                result = result[result['name_club_winner'].isin(selected_winner_clubs)]
+            if exclude_filter != 'loser' and selected_losers:
+                result = result[result['name_fencer_loser'].isin(selected_losers)]
+            if exclude_filter != 'loser_club' and selected_loser_clubs:
+                result = result[result['name_club_loser'].isin(selected_loser_clubs)]
+            if exclude_filter != 'fight_lvl' and selected_fight_lvl:
+                result = result[result['type'].isin(selected_fight_lvl)]
+            if exclude_filter != 'gender' and selected_gender:
+                result = result[result['gender'].isin(selected_gender)]
+            return result
 
-        #data = data.sort_values(by='date')
-        data = data.to_dict('records')
+        # Generate options from data filtered by OTHER filters (interdependent filtering)
+        tournament_opts = make_options(apply_filters_except(data, 'tournament')["name_tournament"])
+        date_opts = make_options(apply_filters_except(data, 'date')["date"], is_date=True)
+        winner_opts = make_options(apply_filters_except(data, 'winner')["name_fencer_winner"])
+        winner_club_opts = make_options(apply_filters_except(data, 'winner_club')["name_club_winner"])
+        loser_opts = make_options(apply_filters_except(data, 'loser')["name_fencer_loser"])
+        loser_club_opts = make_options(apply_filters_except(data, 'loser_club')["name_club_loser"])
+        fight_lvl_opts = make_options(apply_filters_except(data, 'fight_lvl')["type"])
+        gender_opts = make_options(apply_filters_except(data, 'gender')["gender"])
+
+        #data = filtered_data.sort_values(by='date')
+        filtered_data = filtered_data.to_dict('records')
             
-        message_count_duels = f"{len(data)} records"
+        message_count_duels = f"{len(filtered_data)} records"
         
-        return (data,
+        return (filtered_data,
                 message_count_duels,
                 tournament_opts,
                 date_opts,
@@ -289,41 +458,86 @@ def register_callbacks(
         data["tr"] = pd.to_numeric(data["tr"], errors='coerce')
         data["score_index"] = data["ts"]-data["tr"]
             
-        # Apply filters
+        # Apply filters to get filtered data for the table
+        filtered_data = data.copy()
         #TODO:
         if selected_names:
-            data = data[data['name'].isin(selected_names)]
+            filtered_data = filtered_data[filtered_data['name'].isin(selected_names)]
         #TODO:
         if selected_dates:
-            data = data[data['date'].isin(selected_dates)]
+            filtered_data = filtered_data[filtered_data['date'].isin(selected_dates)]
         #TODO:
         if selected_fencers:
-            data = data[data['fencer_name_to_check'].isin(selected_fencers)]
+            filtered_data = filtered_data[filtered_data['fencer_name_to_check'].isin(selected_fencers)]
         #TODO:
         if selected_clubs:
-            data = data[data['club_name_to_check'].isin(selected_clubs)]
+            filtered_data = filtered_data[filtered_data['club_name_to_check'].isin(selected_clubs)]
         if selected_final_ranks:
-            data = data[data['final_rank'].isin(selected_final_ranks)]
+            filtered_data = filtered_data[filtered_data['final_rank'].isin(selected_final_ranks)]
         if selected_percentiles:
-            data = data[data['percentile'].isin(selected_percentiles)]
+            filtered_data = filtered_data[filtered_data['percentile'].isin(selected_percentiles)]
 
-        def make_options(series):
-            return [{"label": v, "value": v} for v in sorted(series.dropna().unique())]
+        def make_options(series, is_date=False, is_numeric=False):
+            unique_vals = series.dropna().unique()
+            if is_date:
+                # Sort dates chronologically (newest first)
+                try:
+                    # Try to parse as dates and sort
+                    sorted_vals = sorted(unique_vals, key=lambda x: pd.to_datetime(x, errors='coerce'), reverse=True)
+                    # Filter out any that couldn't be parsed (will be at the end)
+                    valid_dates = [v for v in sorted_vals if pd.notna(pd.to_datetime(v, errors='coerce'))]
+                    invalid_dates = [v for v in sorted_vals if pd.isna(pd.to_datetime(v, errors='coerce'))]
+                    return [{"label": v, "value": v} for v in valid_dates + sorted(invalid_dates)]
+                except Exception:
+                    # Fallback to alphabetical if date parsing fails
+                    return [{"label": v, "value": v} for v in sorted(unique_vals)]
+            elif is_numeric:
+                # Sort numerically (largest first)
+                try:
+                    sorted_vals = sorted(unique_vals, key=lambda x: pd.to_numeric(x, errors='coerce'), reverse=True)
+                    # Filter out any that couldn't be parsed (will be at the end)
+                    valid_nums = [v for v in sorted_vals if pd.notna(pd.to_numeric(v, errors='coerce'))]
+                    invalid_nums = [v for v in sorted_vals if pd.isna(pd.to_numeric(v, errors='coerce'))]
+                    return [{"label": v, "value": v} for v in valid_nums + sorted(invalid_nums)]
+                except Exception:
+                    # Fallback to alphabetical if numeric parsing fails
+                    return [{"label": v, "value": v} for v in sorted(unique_vals)]
+            else:
+                # Sort alphabetically
+                return [{"label": v, "value": v} for v in sorted(unique_vals)]
+
+        # Helper function to apply all filters except one
+        def apply_filters_except(data_df, exclude_filter):
+            result = data_df.copy()
+            if exclude_filter != 'name' and selected_names:
+                result = result[result['name'].isin(selected_names)]
+            if exclude_filter != 'date' and selected_dates:
+                result = result[result['date'].isin(selected_dates)]
+            if exclude_filter != 'fencer' and selected_fencers:
+                result = result[result['fencer_name_to_check'].isin(selected_fencers)]
+            if exclude_filter != 'club' and selected_clubs:
+                result = result[result['club_name_to_check'].isin(selected_clubs)]
+            if exclude_filter != 'final_rank' and selected_final_ranks:
+                result = result[result['final_rank'].isin(selected_final_ranks)]
+            if exclude_filter != 'percentile' and selected_percentiles:
+                result = result[result['percentile'].isin(selected_percentiles)]
+            return result
 
         #TODO: replace event_id and created_at with real values
-        name_opts = make_options(data["name"])
-        date_opts = make_options(data["date"])
-        fencer_opts = make_options(data["fencer_name_to_check"])
-        club_opts = make_options(data["club_name_to_check"])
-        final_rank_opts = make_options(data["final_rank"])
-        percentile_opts = make_options(data["percentile"])
+        # Generate options from data filtered by OTHER filters (interdependent filtering)
+        name_opts = make_options(apply_filters_except(data, 'name')["name"])
+        date_opts = make_options(apply_filters_except(data, 'date')["date"], is_date=True)
+        fencer_opts = make_options(apply_filters_except(data, 'fencer')["fencer_name_to_check"])
+        club_opts = make_options(apply_filters_except(data, 'club')["club_name_to_check"])
+        final_rank_opts = make_options(apply_filters_except(data, 'final_rank')["final_rank"])
+        percentile_opts = make_options(apply_filters_except(data, 'percentile')["percentile"])
 
-        #data = data.sort_values(by='date')
-        data = data.to_dict('records')
+        #data = filtered_data.sort_values(by='date')
+        filtered_data = filtered_data.to_dict('records')
             
-        message_count_tournament_results = f"{len(data)} records"
+        message_count_tournament_results = f"{len(filtered_data)} records"
         
-        return (data,
+        return (filtered_data,
                 message_count_tournament_results,
                 name_opts,
                 date_opts,
@@ -377,38 +591,83 @@ def register_callbacks(
 
         data = df_events
             
-        # Apply filters
+        # Apply filters to get filtered data for the table
+        filtered_data = data.copy()
         if selected_names:
-            data = data[data['name'].isin(selected_names)]
+            filtered_data = filtered_data[filtered_data['name'].isin(selected_names)]
         if selected_dates:
-            data = data[data['date'].isin(selected_dates)]
+            filtered_data = filtered_data[filtered_data['date'].isin(selected_dates)]
         if selected_disciplines:
-            data = data[data['discipline'].isin(selected_disciplines)]
+            filtered_data = filtered_data[filtered_data['discipline'].isin(selected_disciplines)]
         if selected_types:
-            data = data[data['type_id'].isin(selected_types)]
+            filtered_data = filtered_data[filtered_data['type_id'].isin(selected_types)]
         if selected_genders:
-            data = data[data['gender'].isin(selected_genders)]
+            filtered_data = filtered_data[filtered_data['gender'].isin(selected_genders)]
         if selected_age_categories:
-            data = data[data['age_category'].isin(selected_age_categories)]
+            filtered_data = filtered_data[filtered_data['age_category'].isin(selected_age_categories)]
 
 
-        def make_options(series):
-            return [{"label": v, "value": v} for v in sorted(series.dropna().unique())]
+        def make_options(series, is_date=False, is_numeric=False):
+            unique_vals = series.dropna().unique()
+            if is_date:
+                # Sort dates chronologically (newest first)
+                try:
+                    # Try to parse as dates and sort
+                    sorted_vals = sorted(unique_vals, key=lambda x: pd.to_datetime(x, errors='coerce'), reverse=True)
+                    # Filter out any that couldn't be parsed (will be at the end)
+                    valid_dates = [v for v in sorted_vals if pd.notna(pd.to_datetime(v, errors='coerce'))]
+                    invalid_dates = [v for v in sorted_vals if pd.isna(pd.to_datetime(v, errors='coerce'))]
+                    return [{"label": v, "value": v} for v in valid_dates + sorted(invalid_dates)]
+                except Exception:
+                    # Fallback to alphabetical if date parsing fails
+                    return [{"label": v, "value": v} for v in sorted(unique_vals)]
+            elif is_numeric:
+                # Sort numerically (largest first)
+                try:
+                    sorted_vals = sorted(unique_vals, key=lambda x: pd.to_numeric(x, errors='coerce'), reverse=True)
+                    # Filter out any that couldn't be parsed (will be at the end)
+                    valid_nums = [v for v in sorted_vals if pd.notna(pd.to_numeric(v, errors='coerce'))]
+                    invalid_nums = [v for v in sorted_vals if pd.isna(pd.to_numeric(v, errors='coerce'))]
+                    return [{"label": v, "value": v} for v in valid_nums + sorted(invalid_nums)]
+                except Exception:
+                    # Fallback to alphabetical if numeric parsing fails
+                    return [{"label": v, "value": v} for v in sorted(unique_vals)]
+            else:
+                # Sort alphabetically
+                return [{"label": v, "value": v} for v in sorted(unique_vals)]
 
-        name_opts = make_options(data["name"])
-        date_opts = make_options(data["date"])
-        discipline_opts = make_options(data["discipline"])
-        type_opts = make_options(data["type_id"])
-        gender_opts = make_options(data["gender"])
-        age_category_opts = make_options(data["age_category"])
+        # Helper function to apply all filters except one
+        def apply_filters_except(data_df, exclude_filter):
+            result = data_df.copy()
+            if exclude_filter != 'name' and selected_names:
+                result = result[result['name'].isin(selected_names)]
+            if exclude_filter != 'date' and selected_dates:
+                result = result[result['date'].isin(selected_dates)]
+            if exclude_filter != 'discipline' and selected_disciplines:
+                result = result[result['discipline'].isin(selected_disciplines)]
+            if exclude_filter != 'type' and selected_types:
+                result = result[result['type_id'].isin(selected_types)]
+            if exclude_filter != 'gender' and selected_genders:
+                result = result[result['gender'].isin(selected_genders)]
+            if exclude_filter != 'age_category' and selected_age_categories:
+                result = result[result['age_category'].isin(selected_age_categories)]
+            return result
+
+        # Generate options from data filtered by OTHER filters (interdependent filtering)
+        name_opts = make_options(apply_filters_except(data, 'name')["name"])
+        date_opts = make_options(apply_filters_except(data, 'date')["date"], is_date=True)
+        discipline_opts = make_options(apply_filters_except(data, 'discipline')["discipline"])
+        type_opts = make_options(apply_filters_except(data, 'type')["type_id"])
+        gender_opts = make_options(apply_filters_except(data, 'gender')["gender"])
+        age_category_opts = make_options(apply_filters_except(data, 'age_category')["age_category"])
 
 
-        #data = data.sort_values(by='date')
-        data = data.to_dict('records')
+        #data = filtered_data.sort_values(by='date')
+        filtered_data = filtered_data.to_dict('records')
             
-        message_count_tournaments = f"{len(data)} records"
+        message_count_tournaments = f"{len(filtered_data)} records"
         
-        return (data,
+        return (filtered_data,
                 message_count_tournaments,
                 name_opts,
                 date_opts,
@@ -610,6 +869,61 @@ def register_callbacks(
             safe(stats_total, "total_tournaments"),
         )
         
+    
+    @app.callback(
+        Output("filter-fencer-name-second", "options"),
+        Output("filter-fencer-name-second", "value"),
+        Input("filter-fencer-name-first", "value"),
+        Input("filter-fencer-name-second", "value"),
+    )
+    def update_second_fencer_options(first_fencer, current_second_fencer):
+        """Update second fencer filter to show only fencers who have mutual fights with first fencer"""
+        if not first_fencer:
+            # If no first fencer selected, show all players
+            df = df_duels_prep.copy()
+            df["name_fencer_winner"].fillna("UNKNOWN", inplace=True)
+            df["name_fencer_loser"].fillna("UNKNOWN", inplace=True)
+            all_players = sorted(set(
+                df["name_fencer_winner"].tolist() +
+                df["name_fencer_loser"].tolist()
+            ))
+            options = [{'label': p, 'value': p} for p in all_players]
+            # Keep current selection if it's still valid
+            if current_second_fencer and current_second_fencer in [opt['value'] for opt in options]:
+                return options, current_second_fencer
+            return options, None
+        
+        # Find all fencers who have mutual fights with the first fencer
+        df = df_duels_prep.copy()
+        df["name_fencer_winner"].fillna("UNKNOWN", inplace=True)
+        df["name_fencer_loser"].fillna("UNKNOWN", inplace=True)
+        
+        # Get all duels involving the first fencer
+        fencer_duels = df[
+            (df['name_fencer_winner'] == first_fencer) |
+            (df['name_fencer_loser'] == first_fencer)
+        ]
+        
+        # Extract opponents (both winners and losers who fought the first fencer)
+        opponents = set()
+        for _, row in fencer_duels.iterrows():
+            if row['name_fencer_winner'] == first_fencer:
+                opponents.add(row['name_fencer_loser'])
+            else:
+                opponents.add(row['name_fencer_winner'])
+        
+        # Remove the first fencer from the list if present
+        opponents.discard(first_fencer)
+        
+        # Sort and create options
+        sorted_opponents = sorted(opponents)
+        options = [{'label': p, 'value': p} for p in sorted_opponents]
+        
+        # If current selection is not in the new options, clear it
+        if current_second_fencer and current_second_fencer not in opponents:
+            return options, None
+        
+        return options, current_second_fencer
     
     @app.callback(
         Output("duels-common-table", "data"),
