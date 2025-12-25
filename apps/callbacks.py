@@ -1,16 +1,14 @@
-from datetime import datetime, timedelta
-from dash.dependencies import Input, Output, State
-from dash import dcc, html
+from dash.dependencies import Input, Output
+import dash
 import pandas as pd
-import numpy as np
-import plotly.express as px
-import plotly.graph_objects as go
 
 from apps.layout import eliminations_figure
 
-def register_callbacks(app, runner, 
-                       df_clubs, df_duels, df_events, df_fencers, df_tournaments, df_tournament_results,
-                       df_duels_prep, df_tournament_results_prep):
+def register_callbacks(
+    app, runner,
+    df_clubs, df_duels, df_events, df_fencers, df_tournaments,
+    df_tournament_results, df_duels_prep, df_tournament_results_prep
+):
     
     
     @app.callback(
@@ -28,11 +26,24 @@ def register_callbacks(app, runner,
         Input('filter-fencers-gender', 'value'),
         Input('filter-fencers-birthyear', 'value'),
     )
-    def refresh_fencers(selected_names, selected_clubs, selected_countries, selected_genders, selected_birthyears):
+    def refresh_fencers(
+        selected_names, selected_clubs, selected_countries,
+        selected_genders, selected_birthyears
+    ):
         
         #TODO: rozmyslet zda tu dám prep funkci bokem
-        data = pd.merge(df_fencers, df_clubs[['id', 'name', "website"]], left_on='club_id', right_on='id', how='left', suffixes=('', '_club'))
-        data = data.rename(columns={'name_club': 'club_name'}) #? if no clashing names, no suffix, no need to rename it
+        data = pd.merge(
+            df_fencers, df_clubs[['id', 'name', "website"]],
+            left_on='club_id', right_on='id', how='left',
+            suffixes=('', '_club')
+        )
+        # Rename club name column if it exists (suffix applied only if there's a conflict)
+        if 'name_club' in data.columns:
+            data = data.rename(columns={'name_club': 'club_name'})
+        elif 'name' in data.columns and 'name' in df_clubs.columns:
+            # If no conflict, the club name might be in a different column - check if we need to rename
+            # For now, assume club name is already correctly named or handle separately
+            pass
         
         # Apply filters
         if selected_names:
@@ -48,10 +59,12 @@ def register_callbacks(app, runner,
 
         #? bohužel neexistuje link na fencera, jen na klub (vlastní URL)   
         #data['name_url'] = data['name'].apply(lambda x: f"[{x}](https://www.czechfencing.cz/)")
-        data['name_url'] = data.apply(
-            lambda row: f"[{row['club_name']}]({row['website']})" if pd.notna(row['website']) and row['website'] else  f"[{row['club_name']}](https://www.czechfencing.cz/)",
-            axis=1
-        )
+        def create_club_url(row):
+            if pd.notna(row['website']) and row['website']:
+                return f"[{row['club_name']}]({row['website']})"
+            return f"[{row['club_name']}](https://www.czechfencing.cz/)"
+        
+        data['name_url'] = data.apply(create_club_url, axis=1)
          
         def make_options(series):
             return [{"label": v, "value": v} for v in sorted(series.dropna().unique())]
@@ -85,10 +98,11 @@ def register_callbacks(app, runner,
         Input('reset-fencers-filters-button', 'n_clicks'),
         prevent_initial_call=True  # so it doesn't fire on page load
     )
-    def reset_filters(n_clicks):
+    def reset_fencers_filters(n_clicks):
         if n_clicks:
             # Returning None clears multi-select dropdowns
             return None, None, None, None, None
+        return dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
         
     
     @app.callback(
@@ -135,10 +149,11 @@ def register_callbacks(app, runner,
         Input('reset-clubs-filters-button', 'n_clicks'),
         prevent_initial_call=True  # so it doesn't fire on page load
     )
-    def reset_filters(n_clicks):
+    def reset_clubs_filters(n_clicks):
         if n_clicks:
             # Returning None clears multi-select dropdowns
             return None, None
+        return dash.no_update, dash.no_update
                   
     
     @app.callback(
@@ -165,8 +180,11 @@ def register_callbacks(app, runner,
         Input("filter-duels-fight-lvl", "value"),
         Input("filter-duels-gender", "value")
     )
-    def refresh_duels(#n_clicks, 
-                      selected_tournaments, selected_dates, selected_winners,selected_winner_clubs, selected_losers, selected_loser_clubs, selected_fight_lvl, selected_gender):
+    def refresh_duels(
+        selected_tournaments, selected_dates, selected_winners,
+        selected_winner_clubs, selected_losers, selected_loser_clubs,
+        selected_fight_lvl, selected_gender
+    ):
 
         #? ale stále, df_duels_prep jde na filtry, ale tady to přepočíává znova??        
         data = df_duels_prep
@@ -230,10 +248,14 @@ def register_callbacks(app, runner,
         Input('reset-duels-filters-button', 'n_clicks'),
         prevent_initial_call=True  # so it doesn't fire on page load
     )
-    def reset_filters(n_clicks):
+    def reset_duels_filters(n_clicks):
         if n_clicks:
             # Returning None clears multi-select dropdowns
             return None, None, None, None, None, None, None, None
+        return (
+            dash.no_update, dash.no_update, dash.no_update, dash.no_update,
+            dash.no_update, dash.no_update, dash.no_update, dash.no_update
+        )
 
 
     @app.callback(
@@ -253,12 +275,13 @@ def register_callbacks(app, runner,
         Input('filter-tournament-results-final-rank', 'value'),
         Input('filter-tournament-results-percentile', 'value'),
     )
-    def refresh_tournament_results(#n_clicks, 
-                      selected_names, selected_dates, selected_fencers, selected_clubs, selected_final_ranks, selected_percentiles):
+    def refresh_tournament_results(
+        selected_names, selected_dates, selected_fencers,
+        selected_clubs, selected_final_ranks, selected_percentiles
+    ):
 
         #TODO: asi potřebuju plus clubs, events
-        data = df_tournament_results_prep
-        print(data.head())
+        data = df_tournament_results_prep.copy()
         
         #TODO: move this to prep in runner?
         data["final_rank"] = pd.to_numeric(data["final_rank"], errors='coerce')
@@ -320,10 +343,14 @@ def register_callbacks(app, runner,
         Input('reset-tournament-results-filters-button', 'n_clicks'),
         prevent_initial_call=True  # so it doesn't fire on page load
     )
-    def reset_filters(n_clicks):
+    def reset_tournament_results_filters(n_clicks):
         if n_clicks:
             # Returning None clears multi-select dropdowns
             return None, None, None, None, None, None
+        return (
+            dash.no_update, dash.no_update, dash.no_update,
+            dash.no_update, dash.no_update, dash.no_update
+        )
           
         
     @app.callback(
@@ -343,8 +370,10 @@ def register_callbacks(app, runner,
         Input('filter-tournaments-gender', 'value'),
         Input('filter-tournaments-age-category', 'value'),
     )
-    def refresh_tournaments(#n_clicks, 
-                      selected_names, selected_dates, selected_disciplines, selected_types, selected_genders, selected_age_categories):
+    def refresh_tournaments(
+        selected_names, selected_dates, selected_disciplines,
+        selected_types, selected_genders, selected_age_categories
+    ):
 
         data = df_events
             
@@ -399,19 +428,22 @@ def register_callbacks(app, runner,
         Input('reset-tournaments-filters-button', 'n_clicks'),
         prevent_initial_call=True  # so it doesn't fire on page load
     )
-    def reset_filters(n_clicks):
+    def reset_tournaments_filters(n_clicks):
         if n_clicks:
             # Returning None clears multi-select dropdowns
             return None, None, None, None, None, None
+        return (
+            dash.no_update, dash.no_update, dash.no_update,
+            dash.no_update, dash.no_update, dash.no_update
+        )
                   
 
     @app.callback(
         Output('bracket-graph', 'figure'),
         [Input('player-search', 'value'),
-        Input('bracket-graph', 'clickData')],
-        [State('player-search', 'value')]
+        Input('bracket-graph', 'clickData')]
     )
-    def update_figure(player_name, click_data, dropdown_value):        
+    def update_figure(player_name, click_data):        
         # Prioritize dropdown if selected
         if player_name:
             return eliminations_figure(df_duels, highlight_player=player_name)
@@ -428,7 +460,10 @@ def register_callbacks(app, runner,
         if not fencer_name:
             return "-", "-", "-", "-", "-", "-"
         
-        fencer_duels = df[(df['name_fencer_winner'] == fencer_name) | (df['name_fencer_loser'] == fencer_name)]
+        fencer_duels = df[
+            (df['name_fencer_winner'] == fencer_name) |
+            (df['name_fencer_loser'] == fencer_name)
+        ]
         won_duels =  df[df['name_fencer_winner'] == fencer_name]
         lost_duels =  df[df['name_fencer_loser'] == fencer_name]
 
@@ -484,7 +519,7 @@ def register_callbacks(app, runner,
 
         Input("filter-fencer-name-first", "value")
     )
-    def update_stats(fencer_name: str):
+    def update_stats_first(fencer_name: str):
         if not fencer_name:
             return ["-"] * 18  # all 18 outputs
 
@@ -498,12 +533,24 @@ def register_callbacks(app, runner,
             return stat[key] if stat else "-"
 
         return (
-            safe(stats_pools, "total_duels"), safe(stats_elims, "total_duels"), safe(stats_total, "total_duels"),
-            safe(stats_pools, "wins"),        safe(stats_elims, "wins"),        safe(stats_total, "wins"),
-            safe(stats_pools, "losses"),      safe(stats_elims, "losses"),      safe(stats_total, "losses"),
-            f"{safe(stats_pools, 'win_rate')}%", f"{safe(stats_elims, 'win_rate')}%", f"{safe(stats_total, 'win_rate')}%",
-            safe(stats_pools, "avg_score"), safe(stats_elims, "avg_score"), safe(stats_total, "avg_score"),
-            safe(stats_pools, "total_tournaments"), safe(stats_elims, "total_tournaments"), safe(stats_total, "total_tournaments"),
+            safe(stats_pools, "total_duels"),
+            safe(stats_elims, "total_duels"),
+            safe(stats_total, "total_duels"),
+            safe(stats_pools, "wins"),
+            safe(stats_elims, "wins"),
+            safe(stats_total, "wins"),
+            safe(stats_pools, "losses"),
+            safe(stats_elims, "losses"),
+            safe(stats_total, "losses"),
+            f"{safe(stats_pools, 'win_rate')}%",
+            f"{safe(stats_elims, 'win_rate')}%",
+            f"{safe(stats_total, 'win_rate')}%",
+            safe(stats_pools, "avg_score"),
+            safe(stats_elims, "avg_score"),
+            safe(stats_total, "avg_score"),
+            safe(stats_pools, "total_tournaments"),
+            safe(stats_elims, "total_tournaments"),
+            safe(stats_total, "total_tournaments"),
         )
         
         
@@ -529,7 +576,7 @@ def register_callbacks(app, runner,
 
         Input("filter-fencer-name-second", "value")
     )
-    def update_stats(fencer_name: str):
+    def update_stats_second(fencer_name: str):
         if not fencer_name:
             return ["-"] * 18  # all 18 outputs
 
@@ -543,12 +590,24 @@ def register_callbacks(app, runner,
             return stat[key] if stat else "-"
 
         return (
-            safe(stats_pools, "total_duels"), safe(stats_elims, "total_duels"), safe(stats_total, "total_duels"),
-            safe(stats_pools, "wins"),        safe(stats_elims, "wins"),        safe(stats_total, "wins"),
-            safe(stats_pools, "losses"),      safe(stats_elims, "losses"),      safe(stats_total, "losses"),
-            f"{safe(stats_pools, 'win_rate')}%", f"{safe(stats_elims, 'win_rate')}%", f"{safe(stats_total, 'win_rate')}%",
-            safe(stats_pools, "avg_score"), safe(stats_elims, "avg_score"), safe(stats_total, "avg_score"),
-            safe(stats_pools, "total_tournaments"), safe(stats_elims, "total_tournaments"), safe(stats_total, "total_tournaments"),
+            safe(stats_pools, "total_duels"),
+            safe(stats_elims, "total_duels"),
+            safe(stats_total, "total_duels"),
+            safe(stats_pools, "wins"),
+            safe(stats_elims, "wins"),
+            safe(stats_total, "wins"),
+            safe(stats_pools, "losses"),
+            safe(stats_elims, "losses"),
+            safe(stats_total, "losses"),
+            f"{safe(stats_pools, 'win_rate')}%",
+            f"{safe(stats_elims, 'win_rate')}%",
+            f"{safe(stats_total, 'win_rate')}%",
+            safe(stats_pools, "avg_score"),
+            safe(stats_elims, "avg_score"),
+            safe(stats_total, "avg_score"),
+            safe(stats_pools, "total_tournaments"),
+            safe(stats_elims, "total_tournaments"),
+            safe(stats_total, "total_tournaments"),
         )
         
     
@@ -570,7 +629,9 @@ def register_callbacks(app, runner,
         ]
 
         # optional: sort by date
-        if "event_date" in common_duels.columns:
+        if "date" in common_duels.columns:
+            common_duels = common_duels.sort_values("date", ascending=False)
+        elif "event_date" in common_duels.columns:
             common_duels = common_duels.sort_values("event_date", ascending=False)
         
         return common_duels.to_dict("records")
