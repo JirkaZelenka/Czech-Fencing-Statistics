@@ -311,13 +311,13 @@ def create_people_layout():
                         style={
                             **get_modern_button_style(),
                             'backgroundColor': MODERN_COLORS['gray_medium'],
-                            'marginBottom': '20px',
+                            'marginBottom': '15px',
                             'width': '100%'
                         }
                     ),
                     
                     html.H4("Number of Fencers", style={
-                        "marginBottom": "10px",
+                        "marginBottom": "8px",
                         "color": MODERN_COLORS['primary'],
                         "fontSize": "16px",
                         "fontWeight": "600"
@@ -331,15 +331,15 @@ def create_people_layout():
                             "color": MODERN_COLORS['secondary'],
                             "backgroundColor": MODERN_COLORS['light'],
                             "borderRadius": "12px",
-                            "padding": "20px",
+                            "padding": "15px",
                             "boxShadow": "0 4px 6px rgba(0, 0, 0, 0.1)",
                             "textAlign": "center",
                             "border": f"3px solid {MODERN_COLORS['accent']}"
                         }
                     ),
-                ], style={**get_modern_card_style(), "width": "28%", "display": "inline-block", "verticalAlign": "top"})
+                ], style={**get_modern_card_style(), "width": "28%", "display": "inline-block", "verticalAlign": "top", "flexShrink": "0"})
                 
-            ], style={"display": "flex", "flexWrap": "wrap", "marginBottom": "30px"}),
+            ], style={"display": "flex", "flexWrap": "nowrap", "marginBottom": "30px", "gap": "2%"}),
         ]),
         
         html.Div([
@@ -358,7 +358,7 @@ def create_people_layout():
                 style_as_list_view=True,
                 export_format='csv'
             )       
-        ], style={'marginTop': '20px'}),
+        ], style={'marginTop': '20px', 'textAlign': 'center'}),
     ], style={'padding': '20px'})
     return layout
 
@@ -447,13 +447,13 @@ def create_clubs_layout():
                         style={
                             **get_modern_button_style(),
                             'backgroundColor': MODERN_COLORS['gray_medium'],
-                            'marginBottom': '20px',
+                            'marginBottom': '15px',
                             'width': '100%'
                         }
                     ),
                     
                     html.H4("Number of Clubs", style={
-                        "marginBottom": "10px",
+                        "marginBottom": "8px",
                         "color": MODERN_COLORS['primary'],
                         "fontSize": "16px",
                         "fontWeight": "600"
@@ -467,15 +467,15 @@ def create_clubs_layout():
                             "color": MODERN_COLORS['secondary'],
                             "backgroundColor": MODERN_COLORS['light'],
                             "borderRadius": "12px",
-                            "padding": "20px",
+                            "padding": "15px",
                             "boxShadow": "0 4px 6px rgba(0, 0, 0, 0.1)",
                             "textAlign": "center",
                             "border": f"3px solid {MODERN_COLORS['accent']}"
                         }
                     ),
-                ], style={**get_modern_card_style(), "width": "31%", "display": "inline-block", "verticalAlign": "top"})   
+                ], style={**get_modern_card_style(), "width": "31%", "display": "inline-block", "verticalAlign": "top", "flexShrink": "0"})   
                 
-            ], style={"display": "flex", "flexWrap": "wrap", "marginBottom": "30px"}),
+            ], style={"display": "flex", "flexWrap": "nowrap", "marginBottom": "30px", "gap": "3%"}),
         ]),
         
         html.Div([
@@ -615,13 +615,13 @@ def create_duels_layout():
                         style={
                             **get_modern_button_style(),
                             'backgroundColor': MODERN_COLORS['gray_medium'],
-                            'marginBottom': '20px',
+                            'marginBottom': '15px',
                             'width': '100%'
                         }
                     ),
                     
                     html.H4("Number of Duels", style={
-                        "marginBottom": "10px",
+                        "marginBottom": "8px",
                         "color": MODERN_COLORS['primary'],
                         "fontSize": "16px",
                         "fontWeight": "600"
@@ -635,15 +635,15 @@ def create_duels_layout():
                             "color": MODERN_COLORS['secondary'],
                             "backgroundColor": MODERN_COLORS['light'],
                             "borderRadius": "12px",
-                            "padding": "20px",
+                            "padding": "15px",
                             "boxShadow": "0 4px 6px rgba(0, 0, 0, 0.1)",
                             "textAlign": "center",
                             "border": f"3px solid {MODERN_COLORS['accent']}"
                         }
                     ),
-                ], style={**get_modern_card_style(), "width": "20%", "display": "inline-block", "verticalAlign": "top"})   
+                ], style={**get_modern_card_style(), "width": "20%", "display": "inline-block", "verticalAlign": "top", "flexShrink": "0"})   
                 
-            ], style={"display": "flex", "flexWrap": "wrap", "marginBottom": "30px"}),
+            ], style={"display": "flex", "flexWrap": "nowrap", "marginBottom": "30px", "gap": "2%"}),
         ]),
         
         html.Div([
@@ -942,7 +942,7 @@ def create_tournament_results_layout():
                         style={
                             **get_modern_button_style(),
                             'backgroundColor': MODERN_COLORS['gray_medium'],
-                            'marginBottom': '20px',
+                            'marginBottom': '15px',
                             'width': '100%'
                         }
                     ),
@@ -950,7 +950,7 @@ def create_tournament_results_layout():
                     html.H4(
                         "Number of Tournament Results",
                         style={
-                            "marginBottom": "10px",
+                            "marginBottom": "8px",
                             "color": MODERN_COLORS['primary'],
                             "fontSize": "16px",
                             "fontWeight": "600"
@@ -965,15 +965,15 @@ def create_tournament_results_layout():
                             "color": MODERN_COLORS['secondary'],
                             "backgroundColor": MODERN_COLORS['light'],
                             "borderRadius": "12px",
-                            "padding": "20px",
+                            "padding": "15px",
                             "boxShadow": "0 4px 6px rgba(0, 0, 0, 0.1)",
                             "textAlign": "center",
                             "border": f"3px solid {MODERN_COLORS['accent']}"
                         }
                     ),
-                ], style={**get_modern_card_style(), "width": "38%", "display": "inline-block", "verticalAlign": "top"})   
+                ], style={**get_modern_card_style(), "width": "38%", "display": "inline-block", "verticalAlign": "top", "flexShrink": "0"})   
                 
-            ], style={"display": "flex", "flexWrap": "wrap", "marginBottom": "30px"}),
+            ], style={"display": "flex", "flexWrap": "nowrap", "marginBottom": "30px", "gap": "2%"}),
         ]),
         
         html.Div([
@@ -1104,13 +1104,13 @@ def create_tournaments_layout():
                         style={
                             **get_modern_button_style(),
                             'backgroundColor': MODERN_COLORS['gray_medium'],
-                            'marginBottom': '20px',
+                            'marginBottom': '15px',
                             'width': '100%'
                         }
                     ),
 
                     html.H4("Number of Tournaments", style={
-                        "marginBottom": "10px",
+                        "marginBottom": "8px",
                         "color": MODERN_COLORS['primary'],
                         "fontSize": "16px",
                         "fontWeight": "600"
@@ -1124,15 +1124,15 @@ def create_tournaments_layout():
                             "color": MODERN_COLORS['secondary'],
                             "backgroundColor": MODERN_COLORS['light'],
                             "borderRadius": "12px",
-                            "padding": "20px",
+                            "padding": "15px",
                             "boxShadow": "0 4px 6px rgba(0, 0, 0, 0.1)",
                             "textAlign": "center",
                             "border": f"3px solid {MODERN_COLORS['accent']}"
                         }
                     ),
-                ], style={**get_modern_card_style(), "width": "28%", "display": "inline-block", "verticalAlign": "top"})   
+                ], style={**get_modern_card_style(), "width": "28%", "display": "inline-block", "verticalAlign": "top", "flexShrink": "0"})   
                 
-            ], style={"display": "flex", "flexWrap": "wrap", "marginBottom": "30px"}),
+            ], style={"display": "flex", "flexWrap": "nowrap", "marginBottom": "30px", "gap": "2%"}),
         ]),
         
         html.Div([

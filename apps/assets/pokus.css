@@ -30,3 +30,172 @@ td {
 tr:nth-child(even) td {
     background-color: #fafafa;
 }
+
+/* Pagination styling - center and modernize */
+/* Target all possible table containers */
+.dash-spreadsheet-container,
+.dash-table-container {
+    text-align: center !important;
+}
+
+/* Target the pagination row container */
+.dash-spreadsheet-container .row,
+.dash-table-container .row {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin: 20px auto !important;
+    padding: 15px 0 !important;
+    text-align: center !important;
+    width: 100% !important;
+}
+
+/* Target any row that contains pagination (last row is usually pagination) */
+.dash-spreadsheet-container > div > .row:last-child,
+.dash-table-container > div > .row:last-child,
+.dash-spreadsheet-container .row:last-child,
+.dash-table-container .row:last-child {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin: 20px auto !important;
+    padding: 15px 0 !important;
+    text-align: center !important;
+    width: 100% !important;
+}
+
+/* Center the paging element within the row */
+.dash-spreadsheet-container .row .paging,
+.dash-table-container .row .paging,
+.dash-spreadsheet-container .paging,
+.dash-table-container .paging {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: auto !important;
+    gap: 10px;
+    margin: 0 auto !important;
+    text-align: center !important;
+}
+
+.dash-table-container .paging .page-number,
+.dash-spreadsheet-container .paging .page-number {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.dash-table-container .paging .page-number input,
+.dash-spreadsheet-container .paging .page-number input {
+    text-align: center;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #001f3f;
+    background-color: #ffffff;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    width: 60px;
+}
+
+.dash-table-container .paging .page-number input:focus,
+.dash-spreadsheet-container .paging .page-number input:focus {
+    outline: none;
+    border-color: #007BFF;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.dash-table-container .paging button,
+.dash-spreadsheet-container .paging button {
+    background-color: #007BFF !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 10px 20px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
+    margin: 0 5px;
+}
+
+.dash-table-container .paging button:hover:not(:disabled),
+.dash-spreadsheet-container .paging button:hover:not(:disabled) {
+    background-color: #0056b3 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.4);
+}
+
+.dash-table-container .paging button:disabled,
+.dash-spreadsheet-container .paging button:disabled {
+    background-color: #e9ecef !important;
+    color: #6c757d !important;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+.dash-table-container .paging .page-number span,
+.dash-spreadsheet-container .paging .page-number span {
+    color: #495057;
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0 8px;
+}
+
+/* Additional rules to catch pagination in any structure */
+div[class*="paging"],
+div[class*="Paging"] {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin: 0 auto !important;
+    text-align: center !important;
+}
+
+/* Target the cell that contains pagination */
+.dash-spreadsheet-container .row .cell,
+.dash-table-container .row .cell {
+    text-align: center !important;
+}
+
+/* Ensure pagination controls are centered */
+.dash-spreadsheet-container .row:last-child .cell,
+.dash-table-container .row:last-child .cell {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+    width: 100% !important;
+}
+
+/* Center pagination in the last row - more specific targeting */
+.dash-spreadsheet-container > div > div:last-child,
+.dash-table-container > div > div:last-child {
+    text-align: center !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+/* Target pagination input and buttons directly */
+.dash-spreadsheet-container input[type="number"],
+.dash-table-container input[type="number"] {
+    margin: 0 auto !important;
+}
+
+/* Ensure the entire pagination section is centered */
+.dash-spreadsheet-container .row:last-child,
+.dash-table-container .row:last-child {
+    text-align: center !important;
+}
+
+.dash-spreadsheet-container .row:last-child > *,
+.dash-table-container .row:last-child > * {
+    margin: 0 auto !important;
+    text-align: center !important;
+}
