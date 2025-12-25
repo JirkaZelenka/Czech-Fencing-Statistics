@@ -11,3 +11,6 @@ pozn.txt
 *.pyc
 
 .db
+
+/data/men/*
+/data/women/*

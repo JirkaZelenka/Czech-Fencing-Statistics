@@ -245,7 +245,7 @@ class DataManager:
                 conn.rollback()     
       
                 
-    def insert_new_result(self, table_name, df):
+    def insert_new_tournament_result(self, table_name, df):
         
         with self._get_connection() as conn:  
             try:
@@ -292,5 +292,82 @@ class DataManager:
             except sqlite3.Error as e:
                 print(f'Error inserting offer: {e}')        
                 conn.rollback()     
+                
+    
+    def insert_new_duel(self, table_name, df):
+        
+        with self._get_connection() as conn:  
+            try:
+                cursor = conn.cursor()
+                
+                data_to_upload = []
+                for i in range(len(df)):
+                    r = df.iloc[i]
+                    data_to_upload.append([
+                        str(r['id']),
+                        str(r['event_id']),
+                        str(r['type']),
+                        str(r['winner_id']),
+                        str(r['loser_id']),
+                        str(r['winner_score']),
+                        str(r['loser_score']),
+                    
+                        str(r['created_at']),
+                        str(r['updated_at']),
+                        str(r['deleted_at']),
+                        ])
+                print(data_to_upload)
+
+                query = f"""
+                        INSERT INTO {table_name} (
+                        id, event_id, type, winner_id, loser_id, winner_score, loser_score,
+                        
+                        created_at, updated_at, deleted_at)
+                        
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        """             
+                cursor.executemany(query, data_to_upload)
+                conn.commit()
+
+            except sqlite3.Error as e:
+                print(f'Error inserting offer: {e}')        
+                conn.rollback()     
+                
+                
+    def insert_new_participant(self, table_name, df):
+        
+        with self._get_connection() as conn:  
+            try:
+                cursor = conn.cursor()
+                
+                data_to_upload = []
+                for i in range(len(df)):
+                    r = df.iloc[i]
+                    data_to_upload.append([
+                        str(r['id']),
+                        str(r['event_id']),
+                        str(r['fencer_id']),
+                        str(r['club_id']),
+                        
+                        str(r['created_at']),
+                        str(r['updated_at']),
+                        str(r['deleted_at']),
+                        ])
+                print(data_to_upload)
+
+                query = f"""
+                        INSERT INTO {table_name} (
+                        id, event_id, fencer_id, club_id, 
+                        created_at, updated_at, deleted_at)
+                        
+                        VALUES (?, ?, ?, ?, ?, ?, ?)
+                        """             
+                cursor.executemany(query, data_to_upload)
+                conn.commit()
+
+            except sqlite3.Error as e:
+                print(f'Error inserting offer: {e}')        
+                conn.rollback()    
+                
                 
                 

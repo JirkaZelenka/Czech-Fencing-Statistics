@@ -1,3 +1,5 @@
+
+/* tried to be navigation menu, but it doesnt work as i would like to */
 .nav-link {
     color: #ffffff;  /* White text */
     text-decoration: none;
@@ -10,4 +12,21 @@
 
 .nav-link:hover {
     background-color: #005bb5;  /* Darker blue on hover */
+}
+
+
+/* Table styling */
+table, th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+}
+th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+td {
+    background-color: #fff;
+}
+tr:nth-child(even) td {
+    background-color: #fafafa;
 }

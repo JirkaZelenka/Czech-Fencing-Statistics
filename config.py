@@ -124,5 +124,18 @@ class Config:
                     updated_at datetime NOT NULL,
                     deleted_at datetime NOT NULL
                     ); 
+                    """,
+            "participants": 
+                    """ 
+                    CREATE TABLE IF NOT EXISTS participants (
+                    id TEXT PRIMARY KEY,
+                    event_id REFERENCES events (id),
+                    fencer_id REFERENCES fencers (id),
+                    club_id REFERENCES clubs (id),
+                    
+                    created_at datetime NOT NULL,
+                    updated_at datetime NOT NULL,
+                    deleted_at datetime NOT NULL
+                    ); 
                     """
         }
