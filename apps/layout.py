@@ -129,6 +129,7 @@ def create_layout():
     layout = html.Div([
         dcc.Location(id='url', refresh=False),
 
+        dcc.Store(id='app-version', data='v1'),  # Store current version
         html.Div([
             html.Div([
                 html.Img(
@@ -144,23 +145,39 @@ def create_layout():
                         'filter': 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))'
                     }
                 ),
-                dcc.Link('Intro', href='/intro', style=nav_link_style),
+                html.Div([
+                    html.Button('V1 (DB)', id='version-v1-btn', n_clicks=0, style={
+                        **get_modern_button_style(),
+                        'padding': '6px 12px',
+                        'fontSize': '12px',
+                        'marginRight': '5px',
+                        'backgroundColor': MODERN_COLORS['secondary'],
+                    }),
+                    html.Button('V2 (Excel)', id='version-v2-btn', n_clicks=0, style={
+                        **get_modern_button_style(),
+                        'padding': '6px 12px',
+                        'fontSize': '12px',
+                        'backgroundColor': MODERN_COLORS['gray_medium'],
+                    }),
+                ], style={'marginRight': '20px', 'display': 'flex', 'alignItems': 'center'}),
                 html.Span(" | ", style={'color': 'rgba(255, 255, 255, 0.3)', 'margin': '0 8px'}),
-                dcc.Link('People', href='/people', style={**nav_link_style, 'fontWeight': '600'}),
+                dcc.Link('Intro', href='/intro', id='nav-intro', style=nav_link_style),
                 html.Span(" | ", style={'color': 'rgba(255, 255, 255, 0.3)', 'margin': '0 8px'}),
-                dcc.Link('Medals', href='/medals', style=nav_link_style),
+                dcc.Link('People', href='/people', id='nav-people', style={**nav_link_style, 'fontWeight': '600'}),
                 html.Span(" | ", style={'color': 'rgba(255, 255, 255, 0.3)', 'margin': '0 8px'}),
-                dcc.Link('Clubs', href='/clubs', style={**nav_link_style, 'fontWeight': '600'}),
+                dcc.Link('Medals', href='/medals', id='nav-medals', style=nav_link_style),
                 html.Span(" | ", style={'color': 'rgba(255, 255, 255, 0.3)', 'margin': '0 8px'}),
-                dcc.Link('Eliminations', href='/eliminations', style=nav_link_style),
+                dcc.Link('Clubs', href='/clubs', id='nav-clubs', style={**nav_link_style, 'fontWeight': '600'}),
                 html.Span(" | ", style={'color': 'rgba(255, 255, 255, 0.3)', 'margin': '0 8px'}),
-                dcc.Link('Tournament Results', href='/tournament_results', style={**nav_link_style, 'fontWeight': '600'}),
+                dcc.Link('Eliminations', href='/eliminations', id='nav-eliminations', style=nav_link_style),
                 html.Span(" | ", style={'color': 'rgba(255, 255, 255, 0.3)', 'margin': '0 8px'}),
-                dcc.Link('Tournaments', href='/tournaments', style={**nav_link_style, 'fontWeight': '600'}),
+                dcc.Link('Tournament Results', href='/tournament_results', id='nav-tournament-results', style={**nav_link_style, 'fontWeight': '600'}),
                 html.Span(" | ", style={'color': 'rgba(255, 255, 255, 0.3)', 'margin': '0 8px'}),
-                dcc.Link('Duels', href='/duels', style={**nav_link_style, 'fontWeight': '600'}),
+                dcc.Link('Tournaments', href='/tournaments', id='nav-tournaments', style={**nav_link_style, 'fontWeight': '600'}),
                 html.Span(" | ", style={'color': 'rgba(255, 255, 255, 0.3)', 'margin': '0 8px'}),
-                dcc.Link('Personal Stats', href='/personal_stats', style=nav_link_style),
+                dcc.Link('Duels', href='/duels', id='nav-duels', style={**nav_link_style, 'fontWeight': '600'}),
+                html.Span(" | ", style={'color': 'rgba(255, 255, 255, 0.3)', 'margin': '0 8px'}),
+                dcc.Link('Personal Stats', href='/personal_stats', id='nav-personal-stats', style=nav_link_style),
             ], style={
                 'display': 'flex',
                 'align-items': 'center',
@@ -280,27 +297,31 @@ def create_people_layout():
                         placeholder="Select countries...",
                         style=get_modern_dropdown_style()
                     ),
-                    html.Label("Gender", style={**get_modern_label_style(), 'marginTop': '15px'}),
-                    dcc.Dropdown(
-                        id="filter-fencers-gender",
-                        options=[],
-                        multi=True,
-                        searchable=True,
-                        placeholder="Select genders...",
-                        style=get_modern_dropdown_style()
-                    )
+                    html.Div(id="filter-fencers-gender-container", children=[
+                        html.Label("Gender", style={**get_modern_label_style(), 'marginTop': '15px'}),
+                        dcc.Dropdown(
+                            id="filter-fencers-gender",
+                            options=[],
+                            multi=True,
+                            searchable=True,
+                            placeholder="Select genders...",
+                            style=get_modern_dropdown_style()
+                        )
+                    ])
                 ], style={**get_modern_card_style(), "width": "22%", "display": "inline-block", "marginRight": "2%", "verticalAlign": "top"}),
 
                 html.Div([
-                    html.Label("Birthyear", style=get_modern_label_style()),
-                    dcc.Dropdown(
-                        id="filter-fencers-birthyear",
-                        options=[],
-                        multi=True,
-                        searchable=True,
-                        placeholder="Select birthyears...",
-                        style=get_modern_dropdown_style()
-                    )
+                    html.Div(id="filter-fencers-birthyear-container", children=[
+                        html.Label("Birthyear", style=get_modern_label_style()),
+                        dcc.Dropdown(
+                            id="filter-fencers-birthyear",
+                            options=[],
+                            multi=True,
+                            searchable=True,
+                            placeholder="Select birthyears...",
+                            style=get_modern_dropdown_style()
+                        )
+                    ])
                 ], style={**get_modern_card_style(), "width": "22%", "display": "inline-block", "marginRight": "2%", "verticalAlign": "top"}),
                 
                 html.Div([
@@ -345,13 +366,7 @@ def create_people_layout():
         html.Div([
             dash_table.DataTable(
                 id='fencers-table',
-                columns=[
-                    {"name": "Name", "id": "name"},
-                    {"name": "Club", "id": "name_url", "presentation":"markdown"},
-                    {"name": "Country", "id": "country"},
-                    {"name": "Sex", "id": "gender"},
-                    {"name": "Birthyear", "id": "birthyear"},
-                ],
+                columns=[],  # Will be set dynamically based on version
                 **table_styles,
                 page_size=20,
                 sort_action='native',
@@ -424,19 +439,18 @@ def create_clubs_layout():
                         searchable=True,
                         placeholder="Select clubs...",
                         style=get_modern_dropdown_style()
-                    )
-                ], style={**get_modern_card_style(), "width": "30%", "display": "inline-block", "marginRight": "3%", "verticalAlign": "top"}),
-
-                html.Div([
-                    html.Label("City", style=get_modern_label_style()),
-                    dcc.Dropdown(
-                        id="filter-clubs-city",
-                        options=[],
-                        multi=True,
-                        searchable=True,
-                        placeholder="Select cities...",
-                        style=get_modern_dropdown_style()
-                    )
+                    ),
+                    html.Div(id="filter-clubs-city-container", children=[
+                        html.Label("City", style={**get_modern_label_style(), 'marginTop': '15px'}),
+                        dcc.Dropdown(
+                            id="filter-clubs-city",
+                            options=[],
+                            multi=True,
+                            searchable=True,
+                            placeholder="Select cities...",
+                            style=get_modern_dropdown_style()
+                        )
+                    ])
                 ], style={**get_modern_card_style(), "width": "30%", "display": "inline-block", "marginRight": "3%", "verticalAlign": "top"}),
 
                 html.Div([
@@ -481,11 +495,7 @@ def create_clubs_layout():
         html.Div([
             dash_table.DataTable(
                 id='clubs-table',
-                columns=[
-                    {"name": "Name", "id": "name_url", "presentation":"markdown"},
-                    {"name": "City", "id": "city"},
-                    {"name": "Registration number", "id": "registration_number"},
-                ],
+                columns=[],  # Will be set dynamically based on version
                 **table_styles,
                 page_size=20,
                 sort_action='native',
@@ -596,15 +606,17 @@ def create_duels_layout():
                         placeholder="Select Fight Level...",
                         style=get_modern_dropdown_style()
                     ),
-                    html.Label("Gender", style={**get_modern_label_style(), 'marginTop': '15px'}),
-                    dcc.Dropdown(
-                        id="filter-duels-gender",
-                        options=[],
-                        multi=True,
-                        searchable=True,
-                        placeholder="Select Gender...",
-                        style=get_modern_dropdown_style()
-                    )
+                    html.Div(id="filter-duels-gender-container", children=[
+                        html.Label("Gender", style={**get_modern_label_style(), 'marginTop': '15px'}),
+                        dcc.Dropdown(
+                            id="filter-duels-gender",
+                            options=[],
+                            multi=True,
+                            searchable=True,
+                            placeholder="Select Gender...",
+                            style=get_modern_dropdown_style()
+                        )
+                    ])
                 ], style={**get_modern_card_style(), "width": "18%", "display": "inline-block", "marginRight": "2%", "verticalAlign": "top"}),
 
                 html.Div([
@@ -649,18 +661,7 @@ def create_duels_layout():
         html.Div([
             dash_table.DataTable(
                 id='duels-table',
-                columns=[
-                    {"name": "Tournament", "id": "tournament_url", "presentation":"markdown"},
-                    {"name": "Date", "id": "date"},
-                    {"name": "Winner", "id": "name_fencer_winner"},
-                    {"name": "Winner Club", "id": "name_club_winner"},
-                    {"name": "Loser", "id": "name_fencer_loser"},
-                    {"name": "Loser Club", "id": "name_club_loser"},
-                    {"name": "Fight LVL", "id": "type"},
-                    {"name": "Gender", "id": "gender"},
-                    {"name": "Winner Score", "id": "winner_score"},
-                    {"name": "Loser Score", "id": "loser_score"},
-                ],
+                columns=[],  # Will be set dynamically based on version
                 **table_styles,
                 page_size=20,
                 sort_action='native',
@@ -1054,7 +1055,7 @@ def create_tournaments_layout():
                     ),
                 ], style={**get_modern_card_style(), "width": "22%", "display": "inline-block", "marginRight": "2%", "verticalAlign": "top"}),
 
-                html.Div([
+                html.Div(id="filter-tournaments-discipline-type-container", children=[
                     html.Label("Discipline", style=get_modern_label_style()),
                     dcc.Dropdown(
                         id="filter-tournaments-discipline",
@@ -1075,7 +1076,7 @@ def create_tournaments_layout():
                     )
                 ], style={**get_modern_card_style(), "width": "22%", "display": "inline-block", "marginRight": "2%", "verticalAlign": "top"}),
 
-                html.Div([
+                html.Div(id="filter-tournaments-gender-age-container", children=[
                     html.Label("Gender", style=get_modern_label_style()),
                     dcc.Dropdown(
                         id="filter-tournaments-gender",
@@ -1138,14 +1139,7 @@ def create_tournaments_layout():
         html.Div([
             dash_table.DataTable(
                 id='tournaments-table',
-                columns=[
-                    {"name": "Name", "id": "name", "presentation":"markdown"},
-                    {"name": "Date", "id": "date"},
-                    {"name": "Discipline", "id": "discipline"},
-                    {"name": "Type", "id": "type_id"},
-                    {"name": "Gender", "id": "gender"},
-                    {"name": "Age category", "id": "age_category"}
-                ],
+                columns=[],  # Will be set dynamically based on version
                 **table_styles,
                 page_size=20,
                 sort_action='native',
